@@ -1,0 +1,10 @@
+{
+  "presets": [ "es2015-argon" ],
+  "env": {
+    "test": {
+      "plugins": [
+        [ "module-resolver", { "root": [ "./src/" ] } ]
+      ]
+    }
+  }
+}
