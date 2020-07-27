@@ -31,7 +31,7 @@ describe('Rule: no-internal-modules', () => {
         expect(context.report).to.not.have.been.calledOnce();
     });
 
-    it('Rule is not broken', () => {
+    it('Rule is broken', () => {
         const noInternalPageModules = require('rules/no-internal-modules').default;
         const context = {
             options: [
