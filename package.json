@@ -1,0 +1,46 @@
+{
+  "name": "@hh.ru/eslint-plugin-import-rules",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "description": "HH.ru eslint import rules",
+  "scripts": {
+    "build": "babel --ignore '**/*.test.js' --quiet --out-dir lib src",
+    "prepublish": "yarn build",
+    "eslint": "eslint src --fix",
+    "test": "NODE_ENV=test mocha 'src/**/*.test.js' --require babel-register"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hhru/eslint-plugin-import-rules"
+  },
+  "bugs": {
+    "url": "https://github.com/hhru/eslint-plugin-import-rules/issues"
+  },
+  "homepage": "https://github.com/hhru/eslint-plugin-import-rules#readme",
+  "peerDependencies": {
+    "eslint": ">= 4.12.1"
+  },
+  "dependencies": {
+    "eslint-module-utils": "^2.6.0"
+  },
+  "devDependencies": {
+    "@hh.ru/eslint-config": "^8.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015-argon": "^0.1.0",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^8.0.1",
+    "mock-require": "^3.0.3",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0",
+    "eslint": "^7.5.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "eslint",
+    "test"
+  ]
+}
