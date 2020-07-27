@@ -1,13 +1,13 @@
 {
   "name": "@hh.ru/eslint-plugin-import-rules",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "description": "HH.ru eslint import rules",
   "scripts": {
     "build": "babel --ignore '**/*.test.js' --quiet --out-dir lib src",
     "prepublish": "yarn build",
     "eslint": "eslint src --fix",
-    "test": "NODE_ENV=test mocha 'src/**/*.test.js' --require babel-register"
+    "test": "mocha 'src/**/*.test.js' --require babel-register"
   },
   "license": "MIT",
   "repository": {
