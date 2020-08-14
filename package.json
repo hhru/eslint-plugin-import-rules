@@ -27,17 +27,17 @@
   "devDependencies": {
     "@hh.ru/eslint-config": "^8.1.1",
     "babel-cli": "^6.26.0",
-    "babel-preset-es2015-argon": "^0.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
+    "babel-preset-es2015-argon": "^0.1.0",
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1",
-    "mocha": "^8.0.1",
-    "mock-require": "^3.0.3",
-    "sinon": "^9.0.2",
-    "sinon-chai": "^3.5.0",
     "eslint": "^7.5.0",
-    "pre-commit": "^1.2.2"
+    "mocha": "^8.1.1",
+    "mock-require": "^3.0.3",
+    "pre-commit": "^1.2.2",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0"
   },
   "pre-commit": [
     "eslint",
