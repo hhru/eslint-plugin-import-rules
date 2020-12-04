@@ -13,6 +13,12 @@ export default {
                             type: 'string',
                         },
                     },
+                    exclusions: {
+                        type: 'array',
+                        items: {
+                            type: 'string',
+                        },
+                    },
                 },
             },
         ],
@@ -21,12 +27,14 @@ export default {
     create(context) {
         const options = context.options[0] || {};
         const pathRegexps = (options.paths || []).map((pattern) => new RegExp(pattern));
+        const exclusionRegexps = (options.exclusions || []).map((pattern) => new RegExp(pattern));
 
         const getMatchedExpression = (importPath) => pathRegexps.find((re) => importPath.match(re));
+        const getExcludedExpression = (contextPath) => exclusionRegexps.find((re) => contextPath.match(re));
         const getMatchFromExpression = (importPath, regExpression) => {
             const match = importPath.match(regExpression);
 
-            return (match && match[0]) ? match[0] : null;
+            return match && match[0] || null;
         };
 
         function isReachViolation(importPath) {
@@ -37,17 +45,24 @@ export default {
             const expression = getMatchedExpression(normalizeImportPath);
             if (!expression) { return false; }
 
-            // если полученное выражение не совпадает с файлом контекста, правило не нарушается
+            // Если импорт не совпадает с выражением из правила, правило не нарушается
+            const mathImportPath = getMatchFromExpression(normalizeImportPath, expression);
+            if (!mathImportPath) { return false; }
+
             const contextFilename = context.getFilename();
-            const mathFileName = getMatchFromExpression(contextFilename, expression);
-            if (!mathFileName) { return false; }
+            const mathContextName = getMatchFromExpression(contextFilename, expression);
 
-            // Если полученный выражением импорт и полученный выражением файл импорта совпадают, правило не нарушается
-            const mathPath = getMatchFromExpression(normalizeImportPath, expression);
-            if (mathPath === mathFileName) { return false; }
+            // Если файл входит в список исключений, правило не нарушается
+            const exclusionPath = getExcludedExpression(contextFilename);
+            if (exclusionPath) {
+                return false;
+            }
 
-            // во всех остальных случаях правило нарушается
-            return true;
+            // Если полученный выражением импорт и полученный выражением файл импорта не совпадают, правило нарушается
+            if (mathContextName !== mathImportPath) { return true; }
+
+            // во всех остальных случаях правило не нарушается
+            return false;
         }
 
         function checkImportForReaching(importPath, node) {

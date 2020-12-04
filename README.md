@@ -12,7 +12,10 @@
         '@hh.ru/import-rules/no-internal-modules': [ "warn", {
             "paths": [
                 '(?:lux\/pages\/[^\/]*)'
-            ]
+            ],
+            "exclusions": [
+                '(?:lux/modules/routes.js)'
+            ],
         }]
     },
     // ...
