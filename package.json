@@ -7,7 +7,8 @@
     "build": "babel --ignore '**/*.test.js' --quiet --out-dir lib src",
     "prepublish": "yarn build",
     "eslint": "eslint src --fix",
-    "test": "mocha 'src/**/*.test.js' --require @babel/register"
+    "test": "mocha 'src/**/*.test.js' --require @babel/register",
+    "release": "npm publish --access=public"
   },
   "license": "MIT",
   "repository": {
