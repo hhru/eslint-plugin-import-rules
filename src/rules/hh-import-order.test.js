@@ -27,25 +27,6 @@ const ruleTester = new RuleTester({
 ruleTester.run('hh-import-order', myRule, {
     valid: [
         {
-            // Если импортов меньше 5ти (по умолчанию) — пустые строки не вставляем
-            code: codeHelper(`
-import Something from 'util';
-import React from 'react';
-import SomeModule from './module';
-import styles from './styles.less';`),
-        },
-        {
-            // Настройка количества импортов для появления пропусков работает
-            code: codeHelper(`
-import Something from 'util';
-import React from 'react';
-
-import SomeAppModule from 'app/module';
-
-import styles from './styles.less';`),
-            options: [{ minImportsToInsertBlankLines: 0 }],
-        },
-        {
             // Задание кастомной регулярки для определения hh-модулей работает
             code: codeHelper(`
 import Something from 'util';
@@ -57,7 +38,7 @@ import SomeBlokoModule3 from 'bloko/module';
 
 import SomeModule from './module';
 import styles from './styles.less';`),
-            options: [{ hhModulesRegexp: '((bloko)|(bloko-loko))(.)*' }],
+            options: [{ specificModulesRegexp: '((bloko)|(bloko-loko))(.)*' }],
         },
         {
             // Корректный порядок с пустыми строками
@@ -102,6 +83,7 @@ import styles from './styles.less';`),
             output: codeHelper(`
 import Something from 'util';
 import React from 'react';
+
 import SomeModule from './module';
 import styles from './styles.less';`),
         },

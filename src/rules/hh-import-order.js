@@ -10,7 +10,7 @@ const ImportType = {
     /** Внешние зависимости */
     ExternalModules: 'ExternalModules',
     /** HH-библиотеки, задаются регулярным выражением */
-    HHModules: 'HHModules',
+    SpecificExternalModules: 'SpecificExternalModules',
     /** Модули текущего проекта */
     ProjectModules: 'ProjectModules',
     /** Модули находящиеся в текущей директории */
@@ -42,8 +42,8 @@ const Matchers = [
         match: (node) => /^react(.)*/.exec(node.source.value),
     },
     {
-        importType: ImportType.HHModules,
-        match: (node, _, hhModulesRegexp) => hhModulesRegexp.exec(node.source.value),
+        importType: ImportType.SpecificExternalModules,
+        match: (node, _, specificModulesRegexp) => specificModulesRegexp.exec(node.source.value),
     },
     {
         importType: ImportType.ExternalModules,
@@ -61,7 +61,7 @@ const OrderPattern = [
     ImportType.React,
     ImportType.ExternalModules,
     BlankLine,
-    ImportType.HHModules,
+    ImportType.SpecificExternalModules,
     BlankLine,
     ImportType.ProjectModules,
     BlankLine,
@@ -72,14 +72,13 @@ const OrderPattern = [
     ImportType.Relative,
 ];
 
-const getImportType = (node, context, hhModulesRegexp) => {
-    const matchedMatcher = Matchers.find((matcher) => matcher.match(node, context, hhModulesRegexp));
+const getImportType = (node, context, specificModulesRegexp) => {
+    const matchedMatcher = Matchers.find((matcher) => matcher.match(node, context, specificModulesRegexp));
     return matchedMatcher ? matchedMatcher.importType : ImportType.ProjectModules;
 };
 
 const defaultOptions = {
-    hhModulesRegexp: '((@hh.ru)|(bloko))(.)*',
-    minImportsToInsertBlankLines: 5,
+    specificModulesRegexp: '((@hh.ru)|(bloko))(.)*',
 };
 
 export default {
@@ -88,13 +87,10 @@ export default {
         fixable: 'code',
         schema: [
             {
-                type: "object",
+                type: 'object',
                 properties: {
-                    hhModulesRegexp: {
-                        type: "string",
-                    },
-                    minImportsToInsertBlankLines: {
-                        type: "number",
+                    specificModulesRegexp: {
+                        type: 'string',
                     },
                 },
                 additionalProperties: false,
@@ -102,8 +98,8 @@ export default {
         ],
     },
     create: (context) => {
-        const { hhModulesRegexp, minImportsToInsertBlankLines } = { ...defaultOptions, ...context.options[0] };
-        const hhModulesRegexpObject = new RegExp(hhModulesRegexp);
+        const { specificModulesRegexp } = { ...defaultOptions, ...context.options[0] };
+        const specificModulesRegexpObject = new RegExp(specificModulesRegexp);
         const sourceCode = context.getSourceCode();
         return {
             Program: (node) => {
@@ -111,7 +107,6 @@ export default {
                 if (!importNodes.length) {
                     return;
                 }
-                const insertBlankLines = importNodes.length >= minImportsToInsertBlankLines;
 
                 let mappedImports = [];
                 try {
@@ -133,7 +128,7 @@ export default {
                         }
 
                         return {
-                            importType: getImportType(node, context, hhModulesRegexpObject),
+                            importType: getImportType(node, context, specificModulesRegexpObject),
                             source: node.source.value,
                             code,
                             line,
@@ -149,8 +144,7 @@ export default {
 
                 OrderPattern.forEach((orderItem) => {
                     if (orderItem === BlankLine) {
-                        insertBlankLines &&
-                            correctedOrder.length > 0 &&
+                        correctedOrder.length > 0 &&
                             correctedOrder[correctedOrder.length - 1] !== BlankLine &&
                             correctedOrder.push(BlankLine);
                     } else {
