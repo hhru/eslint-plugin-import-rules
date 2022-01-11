@@ -19,6 +19,8 @@ const ImportType = {
     Relative: 'Relative',
     /** Стили */
     Styles: 'Styles',
+    /** Стили */
+    RelativeStyles: 'RelativeStyles',
 };
 
 /** Токен для обозначения пустой строки */
@@ -28,6 +30,12 @@ const Matchers = [
     {
         importType: ImportType.BuiltInModules,
         match: (node, context) => getEslintImportType(node.source.value, context) === 'builtin',
+    },
+    {
+        importType: ImportType.RelativeStyles,
+        match: (node, context) =>
+            ['sibling', 'parent'].includes(getEslintImportType(node.source.value, context)) &&
+            node.source.value.endsWith('.less'),
     },
     {
         importType: ImportType.Relative,
@@ -70,6 +78,8 @@ const OrderPattern = [
     ImportType.Styles,
     BlankLine,
     ImportType.Relative,
+    BlankLine,
+    ImportType.RelativeStyles,
 ];
 
 const getImportType = (node, context, specificModulesRegexp) => {

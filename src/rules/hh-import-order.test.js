@@ -37,6 +37,7 @@ import SomeBlokoModule2 from 'bloko-loko/module3';
 import SomeBlokoModule3 from 'bloko/module';
 
 import SomeModule from './module';
+
 import styles from './styles.less';`),
             options: [{ specificModulesRegexp: '((bloko)|(bloko-loko))(.)*' }],
         },
@@ -85,6 +86,7 @@ import Something from 'util';
 import React from 'react';
 
 import SomeModule from './module';
+
 import styles from './styles.less';`),
         },
         {
