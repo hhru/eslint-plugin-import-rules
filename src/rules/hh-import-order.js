@@ -19,7 +19,7 @@ const ImportType = {
     Relative: 'Relative',
     /** Стили */
     Styles: 'Styles',
-    /** Стили */
+    /** Относительные импорты стилей */
     RelativeStyles: 'RelativeStyles',
 };
 
