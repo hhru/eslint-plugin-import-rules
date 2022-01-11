@@ -1,6 +1,6 @@
 {
   "name": "@hh.ru/eslint-plugin-import-rules",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "lib/index.js",
   "description": "HH.ru eslint import rules",
   "scripts": {
