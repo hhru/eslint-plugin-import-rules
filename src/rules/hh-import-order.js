@@ -118,9 +118,9 @@ export default {
                     return;
                 }
 
-                let mappedImports = [];
+                let mappedImports = {};
                 try {
-                    mappedImports = importNodes.map((node, index) => {
+                    mappedImports = importNodes.reduce((acc, node, index) => {
                         const comments = sourceCode.getCommentsBefore(node);
                         /**
                          * Комментарии из начала файла (до первого импорта) оставляем на месте
@@ -137,14 +137,20 @@ export default {
                                 .join('\n')}\n${code}`;
                         }
 
-                        return {
-                            importType: getImportType(node, context, specificModulesRegexpObject),
+                        const importType = getImportType(node, context, specificModulesRegexpObject);
+                        const importData = {
                             source: node.source.value,
                             code,
                             line,
                             linesCount,
                         };
-                    });
+
+                        if (!acc[importType]) {
+                            acc[importType] = [];
+                        }
+                        acc[importType].push(importData);
+                        return acc;
+                    }, {});
                 } catch (e) {
                     console.error(context.getFilename(), e);
                     return;
@@ -158,10 +164,9 @@ export default {
                             correctedOrder[correctedOrder.length - 1] !== BlankLine &&
                             correctedOrder.push(BlankLine);
                     } else {
-                        correctedOrder.push(
-                            ...mappedImports
-                                .filter((mappedImport) => mappedImport.importType === orderItem)
-                                .sort((a, b) => {
+                        mappedImports[orderItem] &&
+                            correctedOrder.push(
+                                ...mappedImports[orderItem].sort((a, b) => {
                                     if (a.source < b.source) {
                                         return -1;
                                     }
@@ -170,7 +175,7 @@ export default {
                                     }
                                     return 0;
                                 })
-                        );
+                            );
                     }
                 });
 
@@ -178,11 +183,11 @@ export default {
                     correctedOrder.pop();
                 }
 
-                let lastLine = importNodes[0].loc.start.line;
+                let nextImportItemLine = importNodes[0].loc.start.line;
                 const shouldFix = correctedOrder.some((item) => {
                     const isBlankLine = item === BlankLine;
-                    const lineIsCorrect = isBlankLine ? true : lastLine === item.line;
-                    lastLine += isBlankLine ? 1 : item.linesCount;
+                    const lineIsCorrect = isBlankLine ? true : nextImportItemLine === item.line;
+                    nextImportItemLine += isBlankLine ? 1 : item.linesCount;
                     return !lineIsCorrect;
                 });
 
