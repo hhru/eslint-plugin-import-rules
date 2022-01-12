@@ -74,6 +74,7 @@ const Matchers = [
 
 const OrderPattern = [
     ImportType.ShouldBeFirst,
+    BlankLine,
     ImportType.BuiltInModules,
     ImportType.React,
     ImportType.ExternalModules,
