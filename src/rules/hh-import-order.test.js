@@ -71,6 +71,17 @@ import SomeBlokoModule2 from 'bloko/module2';
 // Some random comment
 import SomeAppModule from 'app/module';`),
         },
+        {
+            // Можно задать регулярку для модулей которые должны быть импортированы в самом начале
+            code: codeHelper(`
+import mockComponent from 'app/testUtils/mockComponent';
+import React from 'react';
+
+import SomeBlokoModule from 'bloko/module';
+
+import SomeAppModule from 'app/module';`),
+            options: [{ shouldBeFirstRegexp: '^app/testUtils/(.)*' }],
+        },
     ],
     invalid: [
         {

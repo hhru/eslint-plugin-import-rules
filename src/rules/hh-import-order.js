@@ -3,6 +3,8 @@ import resolver from 'eslint-module-utils/resolve';
 import path from 'path';
 
 const ImportType = {
+    /** Зависимости которые обязательно должны быть импортированы в самом начале */
+    ShouldBeFirst: 'ShouldBeFirst',
     /** React-related заисимости */
     React: 'React',
     /** Встроенные модули вроде path, util */
@@ -28,6 +30,11 @@ const BlankLine = 'BlankLine';
 
 const Matchers = [
     {
+        importType: ImportType.ShouldBeFirst,
+        match: (node, _, options) =>
+            options.shouldBeFirstRegexp && new RegExp(options.shouldBeFirstRegexp).exec(node.source.value),
+    },
+    {
         importType: ImportType.BuiltInModules,
         match: (node, context) => getEslintImportType(node.source.value, context) === 'builtin',
     },
@@ -51,7 +58,8 @@ const Matchers = [
     },
     {
         importType: ImportType.SpecificExternalModules,
-        match: (node, _, specificModulesRegexp) => specificModulesRegexp.exec(node.source.value),
+        match: (node, _, options) =>
+            options.specificModulesRegexp && new RegExp(options.specificModulesRegexp).exec(node.source.value),
     },
     {
         importType: ImportType.ExternalModules,
@@ -65,6 +73,7 @@ const Matchers = [
 ];
 
 const OrderPattern = [
+    ImportType.ShouldBeFirst,
     ImportType.BuiltInModules,
     ImportType.React,
     ImportType.ExternalModules,
@@ -102,14 +111,16 @@ export default {
                     specificModulesRegexp: {
                         type: 'string',
                     },
+                    shouldBeFirstRegexp: {
+                        type: 'string',
+                    },
                 },
                 additionalProperties: false,
             },
         ],
     },
     create: (context) => {
-        const { specificModulesRegexp } = { ...defaultOptions, ...context.options[0] };
-        const specificModulesRegexpObject = new RegExp(specificModulesRegexp);
+        const options = { ...defaultOptions, ...context.options[0] };
         const sourceCode = context.getSourceCode();
         return {
             Program: (node) => {
@@ -137,7 +148,7 @@ export default {
                                 .join('\n')}\n${code}`;
                         }
 
-                        const importType = getImportType(node, context, specificModulesRegexpObject);
+                        const importType = getImportType(node, context, options);
                         const importData = {
                             source: node.source.value,
                             code,
