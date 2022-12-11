@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: eslint-plugin-import-rules
+  annotations:
+    github.com/project-slug: hhru/eslint-plugin-import-rules
+  tags:
+    - backend
+    - js
+spec:
+  type: library
+  lifecycle: production
