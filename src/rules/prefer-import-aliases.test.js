@@ -41,7 +41,7 @@ describe('Rule: prefer-import-alias', () => {
         expect(fixer.replaceText).to.have.been.calledOnce();
         callArgs = fixer.replaceText.getCall(0).args;
         expect(callArgs[0]).to.have.property('value', '@hh.ru/bloko/build/button');
-        expect(callArgs[1]).equal('bloko/button');
+        expect(callArgs[1]).equal('\'bloko/button\'');
     });
 
     it('Rule is not violated', () => {

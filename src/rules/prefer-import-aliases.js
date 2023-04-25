@@ -1,5 +1,6 @@
 export default {
     meta: {
+        fixable: 'code',
         type: 'suggestion',
         schema: [
             {
@@ -50,7 +51,7 @@ export default {
                         node,
                         message: `Import path "${importPath}" should be "${fixProposal}".`,
                         fix(fixer) {
-                            return fixer.replaceText(node.source, fixProposal);
+                            return fixer.replaceText(node.source, `'${fixProposal}'`);
                         },
                     });
                 }
