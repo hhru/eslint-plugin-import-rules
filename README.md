@@ -17,7 +17,12 @@
                 '(?:lux/modules/routes.js)'
             ],
         }],
-        '@hh.ru/import-rules/hh-import-order': [ "error" ]
+        '@hh.ru/import-rules/hh-import-order': [ "error" ],
+        '@hh.ru/import-rules/prefer-import-aliases': [ "error", {
+            "importPaths": [
+                { "matchPattern": "^@hh\\.ru/bloko/build", "replaceBy": "bloko" }
+            ]
+        }],
     },
     // ...
 };
@@ -36,3 +41,8 @@
     Можно настроить паттерн определения специфичных зависимостей выделяемых в отдельный блок (`specificModulesRegexp`)
 
     Если какие-то зависимости должны быть импортированы в самом начале файла — можно определить их с помощью паттерна (`shouldBeFirstRegexp`)
+
+- `prefer-import-aliases`
+
+    Заменяет импорты подходящие под перечисленные шаблоны на более предпочтительную форму. Например может 
+    использоваться если в сервисе есть алиасы для импорта пакетов.
