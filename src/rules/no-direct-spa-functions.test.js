@@ -57,6 +57,14 @@ describe('no-direct-spa-functions', () => {
                     },
                 ],
             },
+            {
+                code: `import { replace } from 'connected-react-router/actions';`,
+                errors: [
+                    {
+                        messageId: 'noDirectReplaceImport',
+                    },
+                ],
+            },
         ],
     });
 });
