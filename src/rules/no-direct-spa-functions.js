@@ -13,7 +13,7 @@ export default {
     create(context) {
         return {
             ImportDeclaration(node) {
-                if (node.source.value === 'connected-react-router') {
+                if (node.source.value === 'connected-react-router' || node.source.value === 'connected-react-router/actions') {
                     const importSpecifiers = node.specifiers.filter((specifier) => specifier.type === 'ImportSpecifier');
 
                     const pushSpecifier = importSpecifiers.find((specifier) => specifier.imported.name === 'push');

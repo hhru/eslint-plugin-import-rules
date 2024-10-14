@@ -49,6 +49,14 @@ describe('no-direct-spa-functions', () => {
                     },
                 ],
             },
+            {
+                code: `import { push } from 'connected-react-router/actions';`,
+                errors: [
+                    {
+                        messageId: 'noDirectPushImport',
+                    },
+                ],
+            },
         ],
     });
 });
