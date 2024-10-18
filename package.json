@@ -47,5 +47,6 @@
   "pre-commit": [
     "eslint",
     "test"
-  ]
+  ],
+  "private": true
 }
