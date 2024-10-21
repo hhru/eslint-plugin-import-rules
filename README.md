@@ -23,6 +23,7 @@
                 { "matchPattern": "^@hh\\.ru/bloko/build", "replaceBy": "bloko" }
             ]
         }],
+        '@hh.ru/import-rules/no-direct-spa-functions': [ "error" ],
     },
     // ...
 };
@@ -46,3 +47,8 @@
 
     Заменяет импорты подходящие под перечисленные шаблоны на более предпочтительную форму. Например может 
     использоваться если в сервисе есть алиасы для импорта пакетов.
+
+- `no-direct-spa-functions`
+
+    Не позволяет импортировать функции `push` и `replace` напрямую из пакета `connected-react-router`, предлагая импортировать наши абстракции - хуки `usePush` и `useReplace`
+    
